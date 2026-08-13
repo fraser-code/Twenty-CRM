@@ -30,6 +30,10 @@ import { WorkspaceInsertQueryBuilder } from 'src/engine/twenty-orm/repository/wo
 import { WorkspaceSoftDeleteQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-soft-delete-query-builder';
 import { WorkspaceUpdateQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-update-query-builder';
 import { applyRowLevelPermissionPredicates } from 'src/engine/twenty-orm/utils/apply-row-level-permission-predicates.util';
+import {
+  applyMegaSpeedSalesAgentRecordAccessWhere,
+  renderMegaSpeedSalesAgentRecordAccessCondition,
+} from 'src/engine/twenty-orm/utils/mega-speed-sales-agent-record-access.util';
 import { formatResult } from 'src/engine/twenty-orm/utils/format-result.util';
 import { getObjectMetadataFromEntityTarget } from 'src/engine/twenty-orm/utils/get-object-metadata-from-entity-target.util';
 import { renderRowLevelPermissionFilterToSql } from 'src/engine/twenty-orm/utils/render-row-level-permission-filter-to-sql.util';
@@ -37,6 +41,7 @@ import { resolveRowLevelPermissionRecordFilter } from 'src/engine/twenty-orm/uti
 
 type JoinAttributeWithRowLevelPermissionMarker = JoinAttribute & {
   hasRowLevelPermissionPredicateApplied?: true;
+  hasMegaSpeedSalesAgentRecordAccessApplied?: true;
 };
 
 const hasRowLevelPermissionPredicateApplied = (
@@ -51,6 +56,20 @@ const markRowLevelPermissionPredicateApplied = (
   (
     joinAttribute as JoinAttributeWithRowLevelPermissionMarker
   ).hasRowLevelPermissionPredicateApplied = true;
+};
+
+const hasMegaSpeedSalesAgentRecordAccessApplied = (
+  joinAttribute: JoinAttribute,
+): boolean =>
+  (joinAttribute as JoinAttributeWithRowLevelPermissionMarker)
+    .hasMegaSpeedSalesAgentRecordAccessApplied === true;
+
+const markMegaSpeedSalesAgentRecordAccessApplied = (
+  joinAttribute: JoinAttribute,
+): void => {
+  (
+    joinAttribute as JoinAttributeWithRowLevelPermissionMarker
+  ).hasMegaSpeedSalesAgentRecordAccessApplied = true;
 };
 
 const andWithExistingJoinCondition = (
@@ -386,6 +405,7 @@ export class WorkspaceSelectQueryBuilder<
 
   applyRowLevelPermissionPredicatesToMainAliasAndJoinedRelations(): void {
     this.applyRowLevelPermissionPredicates();
+    this.applyMegaSpeedSalesAgentRecordAccess();
     this.applyRowLevelPermissionPredicatesToJoinedRelations();
   }
 
@@ -431,6 +451,30 @@ export class WorkspaceSelectQueryBuilder<
     });
   }
 
+  private applyMegaSpeedSalesAgentRecordAccess(): void {
+    if (this.shouldBypassPermissionChecks) {
+      return;
+    }
+
+    if (this.expressionMap.mainAlias?.subQuery) {
+      return;
+    }
+
+    const mainAliasTarget = this.getMainAliasTarget();
+
+    const objectMetadata = getObjectMetadataFromEntityTarget(
+      mainAliasTarget,
+      this.internalContext,
+    );
+
+    applyMegaSpeedSalesAgentRecordAccessWhere({
+      queryBuilder: this,
+      objectMetadata,
+      internalContext: this.internalContext,
+      authContext: this.authContext,
+    });
+  }
+
   private applyRowLevelPermissionPredicatesToJoinedRelations(): void {
     if (this.shouldBypassPermissionChecks) {
       return;
@@ -447,6 +491,11 @@ export class WorkspaceSelectQueryBuilder<
       if (!isDefined(joinedObjectMetadata)) {
         continue;
       }
+
+      this.applyMegaSpeedSalesAgentRecordAccessToJoinedRelation(
+        joinAttribute,
+        joinedObjectMetadata,
+      );
 
       const recordFilter = resolveRowLevelPermissionRecordFilter({
         internalContext: this.internalContext,
@@ -479,6 +528,35 @@ export class WorkspaceSelectQueryBuilder<
       this.setParameters(renderedCondition.parameters);
       markRowLevelPermissionPredicateApplied(joinAttribute);
     }
+  }
+
+  private applyMegaSpeedSalesAgentRecordAccessToJoinedRelation(
+    joinAttribute: JoinAttribute,
+    joinedObjectMetadata: FlatObjectMetadata,
+  ): void {
+    if (hasMegaSpeedSalesAgentRecordAccessApplied(joinAttribute)) {
+      return;
+    }
+
+    const renderedCondition = renderMegaSpeedSalesAgentRecordAccessCondition({
+      objectMetadata: joinedObjectMetadata,
+      internalContext: this.internalContext,
+      authContext: this.authContext,
+      tableAlias: joinAttribute.alias.name,
+    });
+
+    if (!isDefined(renderedCondition)) {
+      markMegaSpeedSalesAgentRecordAccessApplied(joinAttribute);
+      return;
+    }
+
+    joinAttribute.condition = andWithExistingJoinCondition(
+      joinAttribute.condition,
+      renderedCondition.sql,
+    );
+
+    this.setParameters(renderedCondition.parameters);
+    markMegaSpeedSalesAgentRecordAccessApplied(joinAttribute);
   }
 
   private getJoinedObjectMetadataOrUndefined(

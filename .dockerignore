@@ -2,4 +2,9 @@
 .env
 **/node_modules
 .nx/cache
+.corepack
+.logs
+**/dist
+**/.turbo
+**/.next
 packages/twenty-server/.env

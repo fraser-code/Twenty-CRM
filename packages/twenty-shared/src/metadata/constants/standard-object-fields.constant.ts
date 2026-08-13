@@ -661,6 +661,7 @@ export const STANDARD_OBJECT_FIELDS = {
     ),
     title: { universalIdentifier: '20202020-faeb-4c76-8ba6-ccbb0b4a965f' },
     bodyV2: { universalIdentifier: '20202020-a7bb-4d94-be51-8f25181502c8' },
+    owner: { universalIdentifier: '20202020-114e-4a1d-a2a6-0e4b06a1ed01' },
     noteTargets: {
       universalIdentifier: '20202020-1f25-43fe-8b00-af212fdde823',
     },
@@ -793,6 +794,7 @@ export const STANDARD_OBJECT_FIELDS = {
       universalIdentifier: '20202020-a7c9-4e3d-8f1b-2d5a6b7c8e9f',
     },
     company: { universalIdentifier: '20202020-e2f3-448e-b34c-2d625f0025fd' },
+    owner: { universalIdentifier: '20202020-224e-4a1d-a2a6-0e4b06a1ed02' },
     pointOfContactForOpportunities: {
       universalIdentifier: '20202020-911b-4a7d-b67b-918aa9a5b33a',
     },
@@ -1053,6 +1055,12 @@ export const STANDARD_OBJECT_FIELDS = {
     },
     assignedTasks: {
       universalIdentifier: '20202020-61dc-4a1c-99e8-38ebf8d2bbeb',
+    },
+    ownedPeople: {
+      universalIdentifier: '20202020-334e-4a1d-a2a6-0e4b06a1ed03',
+    },
+    ownedNotes: {
+      universalIdentifier: '20202020-444e-4a1d-a2a6-0e4b06a1ed04',
     },
     ownedOpportunities: {
       universalIdentifier: '20202020-9e4d-4b3a-8c1f-6d7e8f9a0b1c',

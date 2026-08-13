@@ -645,6 +645,7 @@ export const STANDARD_OBJECTS = {
           'title',
           'noteTargets',
           'bodyV2',
+          'owner',
           'createdBy',
           'createdAt',
         ],
@@ -655,6 +656,7 @@ export const STANDARD_OBJECTS = {
         viewFieldNames: [
           'createdAt',
           'createdBy',
+          'owner',
           'noteTargets',
           'bodyV2',
           'updatedAt',
@@ -824,6 +826,7 @@ export const STANDARD_OBJECTS = {
         viewFieldNames: [
           'name',
           'emails',
+          'owner',
           'createdBy',
           'company',
           'phones',
@@ -839,6 +842,7 @@ export const STANDARD_OBJECTS = {
           'emails',
           'phones',
           'company',
+          'owner',
           'jobTitle',
           'linkedinLink',
           'avatarUrl',
@@ -1243,6 +1247,8 @@ export const STANDARD_OBJECTS = {
         viewFieldNames: [
           'name',
           'createdAt',
+          'ownedPeople',
+          'ownedNotes',
           'ownedOpportunities',
           'assignedTasks',
         ],

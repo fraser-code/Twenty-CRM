@@ -38,6 +38,10 @@ import { formatData } from 'src/engine/twenty-orm/utils/format-data.util';
 import { formatResult } from 'src/engine/twenty-orm/utils/format-result.util';
 import { formatTwentyOrmEventToDatabaseBatchEvent } from 'src/engine/twenty-orm/utils/format-twenty-orm-event-to-database-batch-event.util';
 import { getObjectMetadataFromEntityTarget } from 'src/engine/twenty-orm/utils/get-object-metadata-from-entity-target.util';
+import {
+  applyMegaSpeedSalesAgentRecordAccessWhere,
+  validateMegaSpeedSalesAgentRecords,
+} from 'src/engine/twenty-orm/utils/mega-speed-sales-agent-record-access.util';
 import { validateRLSPredicatesForRecords } from 'src/engine/twenty-orm/utils/validate-rls-predicates-for-records.util';
 import { computeObjectTargetTable } from 'src/engine/utils/compute-object-target-table.util';
 
@@ -213,6 +217,7 @@ export class WorkspaceUpdateQueryBuilder<
       }
 
       this.applyRowLevelPermissionPredicates();
+      this.applyMegaSpeedSalesAgentRecordAccess();
 
       const valuesSet = this.expressionMap.valuesSet ?? {};
       const updatedRecords: T[] = before.map(
@@ -226,6 +231,9 @@ export class WorkspaceUpdateQueryBuilder<
       );
 
       this.validateRLSPredicatesForUpdate({
+        updatedRecords,
+      });
+      this.validateMegaSpeedSalesAgentRecords({
         updatedRecords,
       });
 
@@ -426,6 +434,7 @@ export class WorkspaceUpdateQueryBuilder<
         this.where({ id: input.criteria });
 
         this.applyRowLevelPermissionPredicates();
+        this.applyMegaSpeedSalesAgentRecordAccess();
 
         const beforeRecord = beforeRecordById.get(input.criteria);
         const updatedRecords = beforeRecord
@@ -438,6 +447,9 @@ export class WorkspaceUpdateQueryBuilder<
           : [];
 
         this.validateRLSPredicatesForUpdate({
+          updatedRecords,
+        });
+        this.validateMegaSpeedSalesAgentRecords({
           updatedRecords,
         });
 
@@ -666,6 +678,47 @@ export class WorkspaceUpdateQueryBuilder<
       shouldBypassPermissionChecks: this.shouldBypassPermissionChecks,
       errorMessage:
         'Updated record does not satisfy row-level security constraints of your current role',
+    });
+  }
+
+  private applyMegaSpeedSalesAgentRecordAccess(): void {
+    if (this.shouldBypassPermissionChecks) {
+      return;
+    }
+
+    const mainAliasTarget = this.getMainAliasTarget();
+
+    const objectMetadata = getObjectMetadataFromEntityTarget(
+      mainAliasTarget,
+      this.internalContext,
+    );
+
+    applyMegaSpeedSalesAgentRecordAccessWhere({
+      queryBuilder: this,
+      objectMetadata,
+      internalContext: this.internalContext,
+      authContext: this.authContext,
+      useDirectTableReference: true,
+    });
+  }
+
+  private validateMegaSpeedSalesAgentRecords({
+    updatedRecords,
+  }: {
+    updatedRecords: T[];
+  }): void {
+    const mainAliasTarget = this.getMainAliasTarget();
+    const objectMetadata = getObjectMetadataFromEntityTarget(
+      mainAliasTarget,
+      this.internalContext,
+    );
+
+    validateMegaSpeedSalesAgentRecords({
+      records: updatedRecords,
+      objectMetadata,
+      internalContext: this.internalContext,
+      authContext: this.authContext,
+      shouldBypassPermissionChecks: this.shouldBypassPermissionChecks,
     });
   }
 }

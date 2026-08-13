@@ -28,6 +28,7 @@ import { computeEventSelectQueryBuilder } from 'src/engine/twenty-orm/utils/comp
 import { formatResult } from 'src/engine/twenty-orm/utils/format-result.util';
 import { formatTwentyOrmEventToDatabaseBatchEvent } from 'src/engine/twenty-orm/utils/format-twenty-orm-event-to-database-batch-event.util';
 import { getObjectMetadataFromEntityTarget } from 'src/engine/twenty-orm/utils/get-object-metadata-from-entity-target.util';
+import { applyMegaSpeedSalesAgentRecordAccessWhere } from 'src/engine/twenty-orm/utils/mega-speed-sales-agent-record-access.util';
 import { computeObjectTargetTable } from 'src/engine/utils/compute-object-target-table.util';
 
 export class WorkspaceSoftDeleteQueryBuilder<
@@ -73,6 +74,7 @@ export class WorkspaceSoftDeleteQueryBuilder<
   override async execute(): Promise<UpdateResult> {
     try {
       this.applyRowLevelPermissionPredicates();
+      this.applyMegaSpeedSalesAgentRecordAccess();
       validateQueryIsPermittedOrThrow({
         expressionMap: this.expressionMap,
         objectsPermissions: this.objectRecordsPermissions,
@@ -214,6 +216,27 @@ export class WorkspaceSoftDeleteQueryBuilder<
       internalContext: this.internalContext,
       authContext: this.authContext,
       featureFlagMap: this.featureFlagMap,
+    });
+  }
+
+  private applyMegaSpeedSalesAgentRecordAccess(): void {
+    if (this.shouldBypassPermissionChecks) {
+      return;
+    }
+
+    const mainAliasTarget = this.getMainAliasTarget();
+
+    const objectMetadata = getObjectMetadataFromEntityTarget(
+      mainAliasTarget,
+      this.internalContext,
+    );
+
+    applyMegaSpeedSalesAgentRecordAccessWhere({
+      queryBuilder: this,
+      objectMetadata,
+      internalContext: this.internalContext,
+      authContext: this.authContext,
+      useDirectTableReference: true,
     });
   }
 }

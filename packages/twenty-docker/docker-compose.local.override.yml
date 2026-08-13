@@ -1,0 +1,19 @@
+services:
+  server:
+    image: mega-speed-twenty:local
+    build:
+      context: ../..
+      dockerfile: packages/twenty-docker/twenty/Dockerfile
+      target: twenty
+    environment:
+      DISABLE_DB_MIGRATIONS: "true"
+      DISABLE_CRON_JOBS_REGISTRATION: "true"
+  worker:
+    image: mega-speed-twenty:local
+    pull_policy: never
+  db:
+    ports: !override
+      - "55432:5432"
+  redis:
+    ports: !override
+      - "56379:6379"
