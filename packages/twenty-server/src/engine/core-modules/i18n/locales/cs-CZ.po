@@ -5388,6 +5388,11 @@ msgstr "Přílohy poznámky"
 msgid "Note body"
 msgstr "Obsah poznámky"
 
+#. js-lingui-id: 3bVQi4
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-note-standard-flat-field-metadata.util.ts
+msgid "Note owner"
+msgstr ""
+
 #. js-lingui-id: Yp057F
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-note-standard-flat-field-metadata.util.ts
 msgid "Note record position"
@@ -5420,6 +5425,11 @@ msgstr "Nadpis poznámky"
 #: src/engine/workspace-manager/twenty-standard-application/utils/object-metadata/create-standard-flat-object-metadata.util.ts
 msgid "Notes"
 msgstr "Poznámky"
+
+#. js-lingui-id: Ec4a+g
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-workspace-member-standard-flat-field-metadata.util.ts
+msgid "Notes owned by the workspace member"
+msgstr ""
 
 #. js-lingui-id: fXBE74
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-company-standard-flat-field-metadata.util.ts
@@ -5879,14 +5889,26 @@ msgstr "Názvy výstupních polí mohou obsahovat pouze písmena, číslice, pod
 msgid "Output field names must use only letters, numbers, underscores, dots or hyphens and be at most 64 characters: {0}"
 msgstr "Názvy výstupních polí musí používat pouze písmena, číslice, podtržítka, tečky nebo pomlčky a mít nejvýše 64 znaků: {0}"
 
+#. js-lingui-id: B9fBPl
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-workspace-member-standard-flat-field-metadata.util.ts
+msgid "Owned notes"
+msgstr ""
+
 #. js-lingui-id: 6ua+9g
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-workspace-member-standard-flat-field-metadata.util.ts
 msgid "Owned opportunities"
 msgstr "Vlastněné příležitosti"
 
+#. js-lingui-id: d8/nxc
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-workspace-member-standard-flat-field-metadata.util.ts
+msgid "Owned people"
+msgstr ""
+
 #. js-lingui-id: LtI9AS
 #: src/engine/metadata-modules/page-layout-widget/constants/standard-page-layout-widget-titles.ts
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-note-standard-flat-field-metadata.util.ts
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-opportunity-standard-flat-field-metadata.util.ts
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-person-standard-flat-field-metadata.util.ts
 msgid "Owner"
 msgstr "Vlastník"
 
@@ -6057,6 +6079,11 @@ msgstr "Lidé v tomto seznamu"
 msgid "People linked to the company."
 msgstr "Osoby spojené se společností."
 
+#. js-lingui-id: nK67Z5
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-workspace-member-standard-flat-field-metadata.util.ts
+msgid "People owned by the workspace member"
+msgstr ""
+
 #. js-lingui-id: wUfL8B
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-message-standard-flat-field-metadata.util.ts
 msgid "Per-recipient delivery status for campaign sends"
@@ -6183,6 +6210,11 @@ msgstr "Oprávnění nenalezeno."
 #: src/engine/workspace-manager/twenty-standard-application/utils/object-metadata/create-standard-flat-object-metadata.util.ts
 msgid "Person"
 msgstr "Osoba"
+
+#. js-lingui-id: egoaSX
+#: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-person-standard-flat-field-metadata.util.ts
+msgid "Person owner"
+msgstr ""
 
 #. js-lingui-id: c3Qq6o
 #: src/engine/workspace-manager/twenty-standard-application/utils/field-metadata/compute-person-standard-flat-field-metadata.util.ts
